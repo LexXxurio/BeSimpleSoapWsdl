@@ -152,7 +152,7 @@ class Dumper
 
     protected function addDefinitions()
     {
-        $this->domDefinitions = $this->document->createElement('definitions');
+        $this->domDefinitions = $this->document->createElement(static::WSDL_NS.':'.'definitions');
         $this->domDefinitions->setAttributeNS(static::XML_NS_URI, static::XML_NS, static::WSDL_NS_URI);
         $this->domDefinitions->setAttributeNS(static::XML_NS_URI, static::XML_NS.':'.static::TYPES_NS, $this->definition->getNamespace());
         $this->domDefinitions->setAttributeNS(static::XML_NS_URI, static::XML_NS.':'.static::SOAP_NS, static::SOAP_NS_URI);
@@ -217,7 +217,7 @@ class Dumper
 
     protected function addComplexTypes()
     {
-        $types = $this->document->createElement('types');
+        $types = $this->document->createElement(static::WSDL_NS.':'.'types');
         $this->domDefinitions->appendChild($types);
 
         $this->domSchema = $this->document->createElement(static::XSD_NS.':schema');
@@ -273,7 +273,7 @@ class Dumper
 
     protected function addPortType()
     {
-        $this->domPortType = $this->document->createElement('portType');
+        $this->domPortType = $this->document->createElement(static::WSDL_NS.':'.'portType');
         $this->domPortType->setAttribute('name', $this->definition->getName().'PortType');
 
         $this->domDefinitions->appendChild($this->domPortType);
@@ -281,7 +281,7 @@ class Dumper
 
     protected function addPortOperation(Method $method)
     {
-        $operation = $this->document->createElement('operation');
+        $operation = $this->document->createElement(static::WSDL_NS.':'.'operation');
         $operation->setAttribute('name', $method->getName());
 
         foreach (array('input' => $method->getInput(), 'output' => $method->getOutput(), 'fault' => $method->getFault()) as $type => $message) {
@@ -289,7 +289,7 @@ class Dumper
                 continue;
             }
 
-            $node = $this->document->createElement($type);
+            $node = $this->document->createElement(static::WSDL_NS.':'.$type);
             $node->setAttribute('message', static::TYPES_NS.':'.$message->getName());
 
             $operation->appendChild($node);
